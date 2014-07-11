@@ -63,9 +63,8 @@ class DatasetTestCase(unittest.TestCase):
 
 
     def testGraphAware(self):
+        if not self.graph.store.graph_aware: return
 
-        if not self.graph.store.graph_aware: return 
-        
         g = self.graph
         g1 = g.graph(self.c1)
 
@@ -76,9 +75,9 @@ class DatasetTestCase(unittest.TestCase):
             self.assertEquals(set(x.identifier for x in self.graph.contexts()),
                               set([self.c1, DATASET_DEFAULT_GRAPH_ID]))
 
-        # added graph is empty 
+        # added graph is empty
         self.assertEquals(len(g1), 0)
-        
+
         g1.add( (self.tarek, self.likes, self.pizza) )
 
         # added graph still exists
@@ -90,7 +89,7 @@ class DatasetTestCase(unittest.TestCase):
 
         g1.remove( (self.tarek, self.likes, self.pizza) )
 
-        # added graph is empty 
+        # added graph is empty
         self.assertEquals(len(g1), 0)
 
         # Some SPARQL endpoint backends (e.g. TDB) do not consider
@@ -101,21 +100,21 @@ class DatasetTestCase(unittest.TestCase):
                               set([self.c1, DATASET_DEFAULT_GRAPH_ID]))
 
         g.remove_graph(self.c1)
-                
+
         # graph is gone
-        self.assertEquals(set(x.identifier for x in self.graph.contexts()), 
+        self.assertEquals(set(x.identifier for x in self.graph.contexts()),
                           set([DATASET_DEFAULT_GRAPH_ID]))
-        
+
     def testDefaultGraph(self):
         # Something the default graph is read-only (e.g. TDB in union mode)
         if self.store == "SPARQLUpdateStore":
             print "Please make sure updating the default graph " \
                   "is supported by your SPARQL endpoint"
-        
+
         self.graph.add(( self.tarek, self.likes, self.pizza))
         self.assertEquals(len(self.graph), 1)
         # only default exists
-        self.assertEquals(set(x.identifier for x in self.graph.contexts()), 
+        self.assertEquals(set(x.identifier for x in self.graph.contexts()),
                           set([DATASET_DEFAULT_GRAPH_ID]))
 
         # removing default graph removes triples but not actual graph
@@ -123,7 +122,7 @@ class DatasetTestCase(unittest.TestCase):
 
         self.assertEquals(len(self.graph), 0)
         # default still exists
-        self.assertEquals(set(x.identifier for x in self.graph.contexts()), 
+        self.assertEquals(set(x.identifier for x in self.graph.contexts()),
                           set([DATASET_DEFAULT_GRAPH_ID]))
 
     def testNotUnion(self):
@@ -134,7 +133,7 @@ class DatasetTestCase(unittest.TestCase):
         g1 = self.graph.graph(self.c1)
         g1.add((self.tarek, self.likes, self.pizza))
 
-        self.assertEqual(list(self.graph.objects(self.tarek, None)), 
+        self.assertEqual(list(self.graph.objects(self.tarek, None)),
                          [])
         self.assertEqual(list(g1.objects(self.tarek, None)), [self.pizza])
 
@@ -149,6 +148,7 @@ if __name__ == '__main__':
 tests = 0
 
 for s in plugin.plugins(pluginname, plugin.Store):
+
     if s.name in ('default', 'IOMemory', 'Auditable',
                   'Concurrent', 'SPARQLStore'):
         continue  # these are tested by default
