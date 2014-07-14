@@ -15,7 +15,7 @@ available under either of the licenses: GPL 2, W3C, BSD, or MIT
 import re
 
 from rdflib.parser import Parser, ParseError
-from rdflib.term import URIRef 
+from rdflib.term import URIRef
 from rdflib.term import BNode
 from rdflib.term import Literal
 
@@ -38,10 +38,10 @@ r_literal = re.compile(literal + litinfo)
 bufsiz = 2048
 validate = False
 
-quot = {b('t'): u'\t', 
-        b('n'): u'\n', 
-        b('r'): u'\r', 
-        b('"'): u'"', 
+quot = {b('t'): u'\t',
+        b('n'): u'\n',
+        b('r'): u'\r',
+        b('"'): u'"',
         b('\\'): u'\\'}
 
 r_safe = re.compile(b(r'([\x20\x21\x23-\x5B\x5D-\x7E]+)'))
@@ -253,11 +253,3 @@ class NTParser(Parser):
             lit = unquote(lit)
             return Literal(lit, lang, dtype)
         return False
-
-
-
-
-
-
-
-
