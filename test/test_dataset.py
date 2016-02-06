@@ -79,7 +79,6 @@ class DatasetTestCase(unittest.TestCase):
 
 
     def testGraphAware(self):
-
         if not self.graph.store.graph_aware: return
 
         g = self.graph
@@ -165,6 +164,7 @@ if __name__ == '__main__':
 tests = 0
 
 for s in plugin.plugins(pluginname, plugin.Store):
+
     if s.name in ('default', 'IOMemory', 'Auditable',
                   'Concurrent', 'SPARQLStore'):
         continue  # these are tested by default
